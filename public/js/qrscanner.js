@@ -9,16 +9,32 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log("SmartAttend QR Scanner loaded.");
     console.log("====================================");
 
+    // ==========================================
+    // API
+    // ==========================================
+
+    const API = "http://localhost:3000/api";
+
+    console.log("QR Scanner API:", API);
+
+    // ==========================================
+    // ELEMENTS
+    // ==========================================
+
     const reader = document.getElementById("reader");
     const result = document.getElementById("result");
 
     if (!reader) {
+
         console.error("#reader not found.");
+
         return;
     }
 
     if (!result) {
+
         console.error("#result not found.");
+
         return;
     }
 
@@ -26,31 +42,47 @@ document.addEventListener("DOMContentLoaded", async function () {
     // SOUNDS
     // ==========================================
 
-    const successSound = new Audio("/sounds/success.mp3");
-    const errorSound = new Audio("/sounds/error.mp3");
+    const successSound =
+        new Audio("/sounds/success.mp3");
+
+    const errorSound =
+        new Audio("/sounds/error.mp3");
 
     successSound.preload = "auto";
     errorSound.preload = "auto";
+
 
     function playSuccessSound() {
 
         successSound.currentTime = 0;
 
         successSound.play().catch(error => {
-            console.warn("Success sound blocked:", error);
+
+            console.warn(
+                "Success sound blocked:",
+                error
+            );
+
         });
 
     }
+
 
     function playErrorSound() {
 
         errorSound.currentTime = 0;
 
         errorSound.play().catch(error => {
-            console.warn("Error sound blocked:", error);
+
+            console.warn(
+                "Error sound blocked:",
+                error
+            );
+
         });
 
     }
+
 
     // ==========================================
     // CHECK QR LIBRARY
@@ -63,22 +95,34 @@ document.addEventListener("DOMContentLoaded", async function () {
         );
 
         result.innerHTML = `
+
             <div class="error-box">
-                <h2>❌ QR Scanner Library Not Loaded</h2>
-                <p>Please check your Html5Qrcode script.</p>
+
+                <h2>
+                    ❌ QR Scanner Library Not Loaded
+                </h2>
+
+                <p>
+                    Please check your Html5Qrcode script.
+                </p>
+
             </div>
+
         `;
 
         return;
     }
 
+
     // ==========================================
     // CREATE SCANNER
     // ==========================================
 
-    const scanner = new Html5Qrcode("reader");
+    const scanner =
+        new Html5Qrcode("reader");
 
     let processing = false;
+
 
     // ==========================================
     // QR SCANNED
@@ -87,10 +131,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     async function onScanSuccess(decodedText) {
 
         console.log("====================================");
-        console.log("QR CODE DETECTED:", decodedText);
+
+        console.log(
+            "QR CODE DETECTED:",
+            decodedText
+        );
+
         console.log("====================================");
 
-        // Prevent duplicate scans
+
+        // ==========================================
+        // PREVENT DUPLICATE SCANS
+        // ==========================================
+
         if (processing) {
 
             console.log(
@@ -102,6 +155,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         processing = true;
 
+
         try {
 
             // ======================================
@@ -111,6 +165,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const scannedId =
                 String(decodedText || "").trim();
 
+
             if (!scannedId) {
 
                 throw new Error(
@@ -119,60 +174,108 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             }
 
+
             console.log(
                 "Student ID:",
                 scannedId
             );
 
+
+            // ======================================
+            // API URL
+            // ======================================
+
+            const scanURL =
+                `${API}/attendance/scan`;
+
+
+            console.log(
+                "Sending attendance request to:",
+                scanURL
+            );
+
+
             // ======================================
             // SEND TO BACKEND
             // ======================================
 
-            const response = await fetch(
-                "/api/attendance/scan",
-                {
-                    method: "POST",
+            const response =
+                await fetch(
+                    scanURL,
+                    {
+                        method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-                    body: JSON.stringify({
-                        studentId: scannedId
-                    })
-                }
-            );
+                        body: JSON.stringify({
+
+                            studentId:
+                                scannedId
+
+                        })
+                    }
+                );
+
+
+            // ======================================
+            // HTTP STATUS
+            // ======================================
 
             console.log(
                 "HTTP STATUS:",
                 response.status
             );
 
+
             // ======================================
             // READ SERVER RESPONSE
             // ======================================
 
+            const contentType =
+                response.headers.get(
+                    "content-type"
+                ) || "";
+
+
             let data = {};
 
-            try {
 
-                data = await response.json();
+            if (
+                contentType.includes(
+                    "application/json"
+                )
+            ) {
+
+                data =
+                    await response.json();
 
             }
 
-            catch (jsonError) {
+            else {
+
+                const text =
+                    await response.text();
+
+                console.error(
+                    "Server returned non-JSON response:",
+                    text
+                );
 
                 throw new Error(
-                    "Server returned an invalid response."
+                    `Server returned an invalid response. HTTP ${response.status}`
                 );
 
             }
+
 
             console.log(
                 "SERVER RESPONSE:",
                 data
             );
+
 
             // ======================================
             // SUCCESS
@@ -188,10 +291,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                     "ATTENDANCE SUCCESS"
                 );
 
+
                 playSuccessSound();
+
 
                 const student =
                     data.student;
+
+
+                // ==================================
+                // STUDENT INFORMATION
+                // ==================================
 
                 const studentName =
                     student.name ||
@@ -199,25 +309,30 @@ document.addEventListener("DOMContentLoaded", async function () {
                     student.fullName ||
                     "Unknown Student";
 
+
                 const studentId =
                     student.studentId ||
                     student.lrn ||
                     student.rfid ||
                     scannedId;
 
+
                 const grade =
                     student.grade ||
                     student.gradeLevel ||
                     "";
+
 
                 const section =
                     student.section ||
                     student.sectionName ||
                     "";
 
+
                 const status =
                     student.status ||
                     "Active";
+
 
                 const profilePic =
                     student.photo ||
@@ -226,6 +341,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                     student.photoUrl ||
                     "";
 
+
+                // ==================================
+                // DISPLAY SUCCESS
+                // ==================================
+
                 result.innerHTML = `
 
                     <div class="success-box student-scan-card">
@@ -233,61 +353,97 @@ document.addEventListener("DOMContentLoaded", async function () {
                         ${
                             profilePic
                                 ? `
+
                                     <img
                                         src="${escapeHTML(profilePic)}"
                                         class="scan-profile-pic"
                                         alt="Student Profile"
                                         onerror="this.style.display='none';"
                                     >
+
                                   `
                                 : ""
                         }
 
+
                         <div class="attendance-title">
+
                             ✓ ATTENDANCE RECORDED
+
                         </div>
 
+
                         <h2 class="scan-student-name">
+
                             ${escapeHTML(studentName)}
+
                         </h2>
+
 
                         <div class="scan-student-info">
 
+
                             <div class="info-row">
-                                <span>LRN</span>
+
+                                <span>
+                                    LRN
+                                </span>
+
                                 <strong>
                                     ${escapeHTML(studentId)}
                                 </strong>
+
                             </div>
 
+
                             <div class="info-row">
-                                <span>Grade</span>
+
+                                <span>
+                                    Grade
+                                </span>
+
                                 <strong>
                                     ${escapeHTML(grade)}
                                 </strong>
+
                             </div>
 
+
                             <div class="info-row">
-                                <span>Section</span>
+
+                                <span>
+                                    Section
+                                </span>
+
                                 <strong>
                                     ${escapeHTML(section)}
                                 </strong>
+
                             </div>
 
+
                             <div class="info-row">
-                                <span>Status</span>
+
+                                <span>
+                                    Status
+                                </span>
+
                                 <strong>
                                     ${escapeHTML(status)}
                                 </strong>
+
                             </div>
 
+
                         </div>
+
 
                     </div>
 
                 `;
 
             }
+
 
             // ======================================
             // SERVER ERROR
@@ -300,25 +456,33 @@ document.addEventListener("DOMContentLoaded", async function () {
                     data
                 );
 
+
                 playErrorSound();
+
 
                 result.innerHTML = `
 
                     <div class="error-box">
 
                         <h2>
+
                             ❌
                             ${escapeHTML(
                                 data.message ||
                                 "Student not found."
                             )}
+
                         </h2>
 
+
                         <p>
+
                             Scanned ID:
+
                             <strong>
                                 ${escapeHTML(scannedId)}
                             </strong>
+
                         </p>
 
                     </div>
@@ -329,6 +493,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
 
+
+        // ==========================================
+        // FETCH ERROR
+        // ==========================================
+
         catch (error) {
 
             console.error(
@@ -336,7 +505,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 error
             );
 
+
             playErrorSound();
+
 
             result.innerHTML = `
 
@@ -346,11 +517,27 @@ document.addEventListener("DOMContentLoaded", async function () {
                         ❌ Cannot connect to server
                     </h2>
 
+
                     <p>
+
                         ${escapeHTML(
                             error.message ||
                             "Unknown error"
                         )}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            API:
+                        </strong>
+
+                        ${escapeHTML(
+                            `${API}/attendance/scan`
+                        )}
+
                     </p>
 
                 </div>
@@ -359,21 +546,26 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
 
+
         // ==========================================
         // READY FOR NEXT SCAN
         // ==========================================
 
-        setTimeout(function () {
+        setTimeout(
+            function () {
 
-            processing = false;
+                processing = false;
 
-            console.log(
-                "Scanner ready for next scan."
-            );
+                console.log(
+                    "Scanner ready for next scan."
+                );
 
-        }, 1500);
+            },
+            1500
+        );
 
     }
+
 
     // ==========================================
     // SCAN FAILURE
@@ -382,10 +574,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     function onScanFailure(errorMessage) {
 
         // Intentionally empty.
-        // QR scanning continuously checks the camera,
-        // so failures are normal when no QR is visible.
+        //
+        // QR scanning continuously checks
+        // the camera, so scan failures are
+        // normal when no QR is visible.
 
     }
+
 
     // ==========================================
     // FIND BEST CAMERA
@@ -394,19 +589,29 @@ document.addEventListener("DOMContentLoaded", async function () {
     function selectBestCamera(cameras) {
 
         if (!Array.isArray(cameras)) {
+
             return null;
+
         }
 
+
         if (cameras.length === 0) {
+
             return null;
+
         }
+
 
         console.log(
             "Available cameras:",
             cameras
         );
 
-        // Look for rear/back/environment camera
+
+        // ======================================
+        // FIND REAR CAMERA
+        // ======================================
+
         const rearCamera =
             cameras.find(camera => {
 
@@ -415,14 +620,21 @@ document.addEventListener("DOMContentLoaded", async function () {
                         camera.label || ""
                     ).toLowerCase();
 
+
                 return (
+
                     label.includes("back") ||
+
                     label.includes("rear") ||
+
                     label.includes("environment") ||
+
                     label.includes("main")
+
                 );
 
             });
+
 
         if (rearCamera) {
 
@@ -431,22 +643,30 @@ document.addEventListener("DOMContentLoaded", async function () {
                 rearCamera
             );
 
+
             return rearCamera.id;
 
         }
 
-        // Otherwise use first available camera
+
+        // ======================================
+        // USE FIRST CAMERA
+        // ======================================
+
         console.log(
             "No rear camera detected."
         );
+
 
         console.log(
             "Using first available camera."
         );
 
+
         return cameras[0].id;
 
     }
+
 
     // ==========================================
     // START CAMERA
@@ -458,13 +678,16 @@ document.addEventListener("DOMContentLoaded", async function () {
             "Checking available cameras..."
         );
 
+
         const cameras =
             await Html5Qrcode.getCameras();
+
 
         console.log(
             "CAMERAS:",
             cameras
         );
+
 
         if (
             !cameras ||
@@ -492,8 +715,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
 
+
+        // ======================================
+        // SELECT CAMERA
+        // ======================================
+
         const cameraId =
             selectBestCamera(cameras);
+
 
         if (!cameraId) {
 
@@ -503,14 +732,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
 
+
         console.log(
             "Using camera ID:",
             cameraId
         );
 
-        // ==========================================
+
+        // ======================================
         // START SCANNER
-        // ==========================================
+        // ======================================
 
         await scanner.start(
 
@@ -518,10 +749,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             {
 
-                // More frames per second
+                // Frames per second
                 fps: 20,
 
-                // Larger scanning area
+
+                // ==================================
+                // QR BOX
+                // ==================================
+
                 qrbox: function (
                     viewfinderWidth,
                     viewfinderHeight
@@ -533,25 +768,33 @@ document.addEventListener("DOMContentLoaded", async function () {
                             viewfinderHeight
                         );
 
-                    // About 70% of camera area
+
                     const boxSize =
                         Math.floor(
                             minDimension * 0.70
                         );
 
+
                     return {
-                        width: boxSize,
-                        height: boxSize
+
+                        width:
+                            boxSize,
+
+                        height:
+                            boxSize
+
                     };
 
                 },
 
+
                 aspectRatio: 1.0,
 
-                // Better QR scanning
+
                 disableFlip: false
 
             },
+
 
             onScanSuccess,
 
@@ -559,17 +802,25 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         );
 
+
+        // ======================================
+        // CAMERA STARTED
+        // ======================================
+
         console.log(
             "===================================="
         );
+
 
         console.log(
             "QR CAMERA STARTED SUCCESSFULLY"
         );
 
+
         console.log(
             "===================================="
         );
+
 
         result.innerHTML = `
 
@@ -579,10 +830,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     📷 Scanner Ready
                 </h3>
 
+
                 <p>
                     Place the entire QR code
                     inside the scanning box.
                 </p>
+
 
                 <p>
                     Move the camera slowly
@@ -595,12 +848,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     }
 
+
+    // ==========================================
+    // CAMERA ERROR
+    // ==========================================
+
     catch (error) {
 
         console.error(
             "CAMERA ERROR:",
             error
         );
+
 
         result.innerHTML = `
 
@@ -610,11 +869,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                     ❌ Unable to Access Camera
                 </h2>
 
+
                 <p>
+
                     ${escapeHTML(
                         error.message ||
                         error
                     )}
+
                 </p>
 
             </div>
@@ -623,13 +885,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     }
 
+
     // ==========================================
     // ESCAPE HTML
     // ==========================================
 
     function escapeHTML(value) {
 
-        return String(value ?? "")
+        return String(
+            value ?? ""
+        )
 
             .replace(
                 /&/g,
