@@ -121,13 +121,19 @@ app.get("/", (req, res) => {
 // ======================
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
+if (require.main === module) {
 
-    console.log("");
-    console.log("====================================");
-    console.log(" SmartAttend Server Running");
-    console.log(` http://localhost:${PORT}`);
-    console.log("====================================");
-    console.log("");
+    server.listen(PORT, () => {
 
-});
+        console.log("");
+        console.log("====================================");
+        console.log(" SmartAttend Server Running");
+        console.log(` http://localhost:${PORT}`);
+        console.log("====================================");
+        console.log("");
+
+    });
+
+}
+
+module.exports = app;
