@@ -1,4 +1,4 @@
-const API="http://localhost:3000/api/settings";
+const API="/api/settings";
 
 window.onload=()=>{
 

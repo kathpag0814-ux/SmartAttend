@@ -2,7 +2,7 @@
 // LOGIN USING MONGODB
 // ================================
 
-const API = "http://localhost:3000/api/auth/login";
+const API = "/api/auth/login";
 
 async function login() {
 

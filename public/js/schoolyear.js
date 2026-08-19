@@ -1,4 +1,4 @@
-const API="http://localhost:3000/api/schoolyear";
+const API="/api/schoolyear";
 
 loadYears();
 

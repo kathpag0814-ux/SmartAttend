@@ -3,7 +3,7 @@
 // Student Registration
 // ==========================================
 
-const API = "http://localhost:3000/api";
+const API = "/api";
 
 // ==========================================
 // LOGGED-IN USER

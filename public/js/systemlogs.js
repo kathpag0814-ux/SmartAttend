@@ -104,7 +104,7 @@ async function deleteAllLogs() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/systemlogs",
+            "/api/systemlogs",
             {
                 method: "DELETE"
             }

@@ -3,7 +3,7 @@
 // teachers.js
 // ==========================================
 
-const API = "http://localhost:3000/api/teachers";
+const API = "/api/teachers";
 
 let teachers = [];
 let editId = null;

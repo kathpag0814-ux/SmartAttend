@@ -1,4 +1,4 @@
-const socket = io();
+
 
 const currentRole = (localStorage.getItem("role") || "").toLowerCase();
 
@@ -10,16 +10,11 @@ console.log("Logged-in Role:", currentRole);
 console.log("Teacher Grade:", teacherGrade);
 console.log("Teacher Section:", teacherSection);
 
-const API = "http://localhost:3000/api";
+const API = "/api";
 
 let records = [];
 
-// ==============================
-// Live Update
-// ==============================
-socket.on("attendanceUpdated", () => {
-    loadAttendance();
-});
+
 
 // ==============================
 // Page Load

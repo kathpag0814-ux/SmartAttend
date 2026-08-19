@@ -3,7 +3,7 @@
 // Attendance Reports
 // ==========================================
 
-const API = "http://localhost:3000/api";
+const API = "/api";
 
 let reports = [];
 let filteredReports = [];
