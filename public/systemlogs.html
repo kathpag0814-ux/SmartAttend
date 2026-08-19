@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartAttend | System Logs</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="icon" href="images/logo.png">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<div class="fingerprint">
+
+<i class="fa-solid fa-qrcode"></i>
+
+</div>
+
+<div>
+
+<h2>SmartAttend</h2>
+
+<p>QR Attendance System</p>
+
+</div>
+
+</div>
+
+<nav>
+
+<a href="index.html">
+<i class="fa-solid fa-chart-column"></i>
+Dashboard
+</a>
+
+<a href="registration.html">
+<i class="fa-solid fa-user-plus"></i>
+Registration
+</a>
+
+<a href="qrcode.html">
+<i class="fa-solid fa-qrcode"></i>
+QR Scanner
+</a>
+
+<a href="attendance.html">
+<i class="fa-solid fa-calendar-check"></i>
+Attendance
+</a>
+
+<a href="reports.html">
+<i class="fa-solid fa-file-lines"></i>
+Reports
+</a>
+
+<a href="settings.html">
+<i class="fa-solid fa-gear"></i>
+Settings
+</a>
+
+<a href="systemlogs.html" class="active">
+<i class="fa-solid fa-list"></i>
+System Logs
+</a>
+
+<a href="teachers.html">
+    <i class="fa-solid fa-chalkboard-user"></i>
+    Teachers
+</a>
+
+<a href="schoolyear.html">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+School Year
+
+</a>
+
+<a href="promote.html">
+
+<i class="fa-solid fa-arrow-up"></i>
+
+Promote Students
+
+</a>
+
+<a href="#" onclick="logout()">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</a>
+
+</nav>
+<br>
+<br>
+<div class="profile">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div class="profile-info">
+
+<h3 id="userName">Administrator</h3>
+
+<p id="userRole">Admin</p>
+
+</div>
+
+</div>
+<div class="sidebar-footer">
+
+    <h3>SMARTATTEND</h3>
+
+    <p>Developed by</p>
+
+    <h4>CodeSynX</h4>
+
+    <span>© 2026</span>
+
+</div>
+
+</aside>
+
+<main>
+
+<header>
+
+<input
+id="searchLogs"
+placeholder="Search Activity">
+
+</header>
+
+<section class="welcome">
+
+<h1>System Logs</h1>
+
+<p>View all system activities.</p>
+
+</section>
+
+<div class="panel">
+
+<h2>
+
+<i class="fa-solid fa-list"></i>
+
+Activity Logs
+
+</h2>
+<button class="delete-all-btn" onclick="deleteAllLogs()">
+    <i class="fa-solid fa-trash-can"></i>
+    Delete All Logs
+</button>
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Activity</th>
+
+<th>Description</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="logsTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/systemlogs.js"></script>
+
+</body>
+
+</html>

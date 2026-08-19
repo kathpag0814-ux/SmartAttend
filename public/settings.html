@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartAttend | Settings</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="icon" href="images/logo.png">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<div class="fingerprint">
+
+<i class="fa-solid fa-qrcode"></i>
+
+</div>
+
+<div>
+
+<h2>SmartAttend</h2>
+
+<p>QR Attendance System</p>
+
+</div>
+
+</div>
+
+<nav>
+
+<a href="index.html">
+<i class="fa-solid fa-chart-column"></i>
+Dashboard
+</a>
+
+<a href="registration.html">
+<i class="fa-solid fa-user-plus"></i>
+Registration
+</a>
+
+<a href="qrcode.html">
+<i class="fa-solid fa-qrcode"></i>
+QR Scanner
+</a>
+
+<a href="attendance.html">
+<i class="fa-solid fa-calendar-check"></i>
+Attendance
+</a>
+
+<a href="reports.html">
+<i class="fa-solid fa-file-lines"></i>
+Reports
+</a>
+
+<a href="settings.html" class="active">
+<i class="fa-solid fa-gear"></i>
+Settings
+</a>
+
+<a href="systemlogs.html">
+<i class="fa-solid fa-list"></i>
+System Logs
+</a>
+
+<a href="teachers.html">
+    <i class="fa-solid fa-chalkboard-user"></i>
+    Teachers
+</a>
+
+<a href="schoolyear.html">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+School Year
+
+</a>
+
+<a href="promote.html">
+
+<i class="fa-solid fa-arrow-up"></i>
+
+Promote Students
+
+</a>
+
+<a href="#" onclick="logout()">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</a>
+
+</nav>
+<br>
+<br>
+<div class="profile">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div class="profile-info">
+
+<h3 id="userName">Administrator</h3>
+
+<p id="userRole">Admin</p>
+
+</div>
+
+</div>
+<div class="sidebar-footer">
+
+    <h3>SMARTATTEND</h3>
+
+    <p>Developed by</p>
+
+    <h4>CodeSynX</h4>
+
+    <span>© 2026</span>
+
+</div>
+</aside>
+
+
+<main>
+
+<section class="welcome">
+
+<h1>System Settings</h1>
+
+<p>Configure SmartAttend.</p>
+
+</section>
+<div class="panel">
+
+    <h2>
+        <i class="fa-solid fa-gear"></i>
+        General Settings
+    </h2>
+
+    <div class="settings-grid">
+
+        <div class="setting-group">
+            <label>School Name</label>
+            <input id="schoolName" placeholder="School Name">
+        </div>
+
+        <div class="setting-group">
+            <label>School Year</label>
+            <input id="schoolYear" placeholder="2026-2027">
+        </div>
+
+        <div class="setting-group">
+            <label>Morning Time In</label>
+            <input id="morningIn" type="time">
+        </div>
+
+        <div class="setting-group">
+            <label>Morning Late Time</label>
+            <input id="morningLate" type="time">
+        </div>
+
+        <div class="setting-group">
+            <label>Morning Time Out</label>
+            <input id="morningOut" type="time">
+        </div>
+
+        <div class="setting-group">
+            <label>Afternoon Time In</label>
+            <input id="afternoonIn" type="time">
+        </div>
+
+        <div class="setting-group">
+            <label>Afternoon Late Time</label>
+            <input id="afternoonLate" type="time">
+        </div>
+
+        <div class="setting-group">
+            <label>Afternoon Time Out</label>
+            <input id="afternoonOut" type="time">
+        </div>
+
+    </div>
+
+    <div class="save-area">
+
+        <button onclick="saveSettings()">
+
+            <i class="fa-solid fa-floppy-disk"></i>
+
+            Save Settings
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =========================
+CHANGE PASSWORD
+========================= -->
+
+<div class="panel">
+
+<h2>
+<i class="fa-solid fa-key"></i>
+Change Password
+</h2>
+
+<div class="password-grid">
+
+<div class="setting-group">
+<label>Current Password</label>
+<input type="password" id="currentPassword">
+</div>
+
+<div class="setting-group">
+<label>New Password</label>
+<input type="password" id="newPassword">
+</div>
+
+<div class="setting-group">
+<label>Confirm Password</label>
+<input type="password" id="confirmPassword">
+</div>
+
+</div>
+
+<div class="save-area">
+<button class="btn-green" onclick="changePassword()">
+<i class="fa-solid fa-key"></i>
+Update Password
+</button>
+</div>
+</div>
+
+</main>
+
+</div>
+<script src="js/auth.js"></script>
+<script src="js/settings.js"></script>
+
+</body>
+
+</html>

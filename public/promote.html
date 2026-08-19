@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartAttend | Promote Students</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+>
+
+<link rel="icon" href="images/logo.png">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="fingerprint">
+            <i class="fa-solid fa-qrcode"></i>
+        </div>
+
+        <div>
+            <h2>SmartAttend</h2>
+            <p>QR Attendance System</p>
+        </div>
+
+    </div>
+
+
+    <nav>
+
+        <a href="index.html">
+            <i class="fa-solid fa-chart-column"></i>
+            Dashboard
+        </a>
+
+        <a href="registration.html">
+            <i class="fa-solid fa-user-plus"></i>
+            Registration
+        </a>
+
+        <a href="qrcode.html">
+            <i class="fa-solid fa-qrcode"></i>
+            QR Scanner
+        </a>
+
+        <a href="attendance.html">
+            <i class="fa-solid fa-calendar-check"></i>
+            Attendance
+        </a>
+
+        <a href="reports.html">
+            <i class="fa-solid fa-file-lines"></i>
+            Reports
+        </a>
+
+        <a href="teachers.html">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            Teachers
+        </a>
+
+        <a href="schoolyear.html">
+            <i class="fa-solid fa-calendar-days"></i>
+            School Year
+        </a>
+
+        <a
+            href="promote.html"
+            class="active"
+        >
+            <i class="fa-solid fa-arrow-up"></i>
+            Promote Students
+        </a>
+
+        <a href="settings.html">
+            <i class="fa-solid fa-gear"></i>
+            Settings
+        </a>
+
+        <a href="systemlogs.html">
+            <i class="fa-solid fa-list"></i>
+            System Logs
+        </a>
+
+        <a
+            href="#"
+            onclick="logout(); return false;"
+        >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </a>
+
+    </nav>
+
+
+    <div class="profile">
+
+        <div class="avatar">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div class="profile-info">
+
+            <h3 id="userName">
+                Administrator
+            </h3>
+
+            <p id="userRole">
+                Admin
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-footer">
+
+        <h3>SMARTATTEND</h3>
+
+        <p>Developed by</p>
+
+        <h4>CodeSynX</h4>
+
+        <span>© 2026</span>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <div class="search-filter">
+
+        <input
+            type="text"
+            id="searchStudent"
+            placeholder="Search student..."
+        >
+
+        <!-- ADMIN FILTER -->
+        <select id="gradeFilter">
+
+            <option value="">
+                All Grades
+            </option>
+
+            <option value="Grade 7">
+                Grade 7
+            </option>
+
+            <option value="Grade 8">
+                Grade 8
+            </option>
+
+            <option value="Grade 9">
+                Grade 9
+            </option>
+
+            <option value="Grade 10">
+                Grade 10
+            </option>
+
+            <option value="Grade 11">
+                Grade 11
+            </option>
+
+            <option value="Grade 12">
+                Grade 12
+            </option>
+
+        </select>
+
+
+        <select id="sectionFilter">
+
+            <option value="">
+                All Sections
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="top-icons">
+
+        <i class="fa-solid fa-bell"></i>
+
+        <i class="fa-solid fa-gear"></i>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     WELCOME
+===================================================== -->
+
+<section class="welcome">
+
+    <h1>
+        Promote Students
+    </h1>
+
+    <p>
+        Promote students to the next grade level and assign their new section.
+    </p>
+
+</section>
+
+
+<!-- =====================================================
+     TEACHER ASSIGNMENT
+===================================================== -->
+
+<div
+    id="teacherAssignment"
+    style="
+        display:none;
+        background:#f0fdf4;
+        border:1px solid #bbf7d0;
+        border-radius:12px;
+        padding:18px;
+        margin-bottom:20px;
+    "
+>
+
+    <div
+        style="
+            display:flex;
+            align-items:center;
+            gap:12px;
+        "
+    >
+
+        <div
+            style="
+                width:42px;
+                height:42px;
+                border-radius:50%;
+                background:#638f1b;
+                color:white;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            "
+        >
+            <i class="fa-solid fa-chalkboard-user"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Teacher Assignment
+            </strong>
+
+            <div
+                id="teacherAssignmentText"
+                style="
+                    margin-top:4px;
+                    color:#475569;
+                "
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     STATS
+===================================================== -->
+
+<div class="stats">
+
+    <div class="stat">
+
+        <i class="fa-solid fa-users"></i>
+
+        <div>
+
+            <h3>
+                Students Shown
+            </h3>
+
+            <h1 id="totalStudents">
+                0
+            </h1>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat green">
+
+        <i class="fa-solid fa-arrow-up"></i>
+
+        <div>
+
+            <h3>
+                Ready to Promote
+            </h3>
+
+            <h1 id="readyStudents">
+                0
+            </h1>
+
+        </div>
+
+    </div>
+
+
+    <div class="stat yellow">
+
+        <i class="fa-solid fa-check"></i>
+
+        <div>
+
+            <h3>
+                Selected
+            </h3>
+
+            <h1 id="selectedStudents">
+                0
+            </h1>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     PROMOTION PANEL
+===================================================== -->
+
+<div class="panel">
+
+    <h2>
+
+        <i class="fa-solid fa-arrow-up"></i>
+
+        Student Promotion
+
+    </h2>
+
+
+    <p
+        style="
+            color:#64748b;
+            margin-bottom:20px;
+        "
+    >
+        Select the next grade and new section for each student.
+    </p>
+
+
+    <!-- SELECT ALL -->
+
+    <div
+        style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:15px;
+            margin-bottom:15px;
+            padding:12px;
+            background:#f8fafc;
+            border-radius:10px;
+        "
+    >
+
+        <label
+            style="
+                display:flex;
+                align-items:center;
+                gap:8px;
+                cursor:pointer;
+            "
+        >
+
+            <input
+                type="checkbox"
+                id="selectAll"
+            >
+
+            <strong>
+                Select All Students
+            </strong>
+
+        </label>
+
+
+        <button
+            type="button"
+            id="promoteSelectedBtn"
+            style="
+                border:none;
+                background:#638f1b;
+                color:white;
+                padding:10px 18px;
+                border-radius:8px;
+                cursor:pointer;
+                font-weight:bold;
+            "
+        >
+
+            <i class="fa-solid fa-arrow-up"></i>
+
+            Promote Selected
+
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================= -->
+
+    <div
+        style="
+            width:100%;
+            overflow-x:auto;
+        "
+    >
+
+        <table class="registration-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        <input
+                            type="checkbox"
+                            id="headerSelectAll"
+                        >
+                    </th>
+
+                    <th>
+                        LRN
+                    </th>
+
+                    <th>
+                        Name
+                    </th>
+
+                    <th>
+                        Current Grade
+                    </th>
+
+                    <th>
+                        Current Section
+                    </th>
+
+                    <th>
+                        Next Grade
+                    </th>
+
+                    <th>
+                        New Section
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="studentTable">
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        style="
+                            text-align:center;
+                            padding:40px;
+                        "
+                    >
+
+                        Loading students...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     AUTH
+===================================================== -->
+
+<script src="js/auth.js"></script>
+
+
+<!-- =====================================================
+     PROMOTE
+===================================================== -->
+
+<script src="js/promote.js"></script>
+
+</body>
+
+</html>

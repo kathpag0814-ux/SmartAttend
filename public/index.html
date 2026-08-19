@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartAttend | Dashboard</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="icon" href="images/logo.png">
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= Sidebar ================= -->
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<div class="fingerprint">
+
+<i class="fa-solid fa-qrcode"></i>
+
+</div>
+
+<div>
+
+<h2>SmartAttend</h2>
+
+<p>QR Attendance System</p>
+
+</div>
+
+</div>
+
+<nav>
+
+<a href="index.html" class="active">
+<i class="fa-solid fa-chart-column"></i>
+Dashboard
+</a>
+
+<a href="registration.html">
+<i class="fa-solid fa-user-plus"></i>
+Registration
+</a>
+
+<a href="qrcode.html">
+<i class="fa-solid fa-qrcode"></i>
+QR Scanner
+</a>
+
+<a href="attendance.html">
+<i class="fa-solid fa-calendar-check"></i>
+Attendance
+</a>
+
+<a href="reports.html">
+<i class="fa-solid fa-file-lines"></i>
+Reports
+</a>
+
+<a href="settings.html">
+<i class="fa-solid fa-gear"></i>
+Settings
+</a>
+
+<a href="systemlogs.html">
+<i class="fa-solid fa-list"></i>
+System Logs
+</a>
+
+<a href="teachers.html">
+    <i class="fa-solid fa-chalkboard-user"></i>
+    Teachers
+</a>
+
+<a href="schoolyear.html">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+School Year
+
+</a>
+<a href="promote.html">
+
+<i class="fa-solid fa-arrow-up"></i>
+
+Promote Students
+
+</a>
+
+<a href="#" onclick="logout()">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</a>
+
+</nav>
+<br>
+<br>
+<div class="profile">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div class="profile-info">
+
+<h3 id="userName">Administrator</h3>
+
+<p id="userRole">Admin</p>
+
+</div>
+
+</div>
+<div class="sidebar-footer">
+
+    <h3>SMARTATTEND</h3>
+
+    <p>Developed by</p>
+
+    <h4>CodeSynX</h4>
+
+    <span>© 2026</span>
+
+</div>
+</aside>
+
+<!-- ================= Main ================= -->
+
+<main>
+
+<header>
+
+<input
+placeholder="Search...">
+
+
+</header>
+
+<section class="welcome">
+
+<h1>Dashboard</h1>
+
+<p>Welcome to SmartAttend QR Code Attendance System</p>
+
+</section>
+
+<div class="stats">
+
+    <div class="stat">
+        <i class="fa-solid fa-users"></i>
+        <div>
+            <h3>Total Students</h3>
+            <h1 id="totalStudents">0</h1>
+        </div>
+    </div>
+
+    <div class="stat green">
+        <i class="fa-solid fa-user-check"></i>
+        <div>
+            <h3>Present Today</h3>
+            <h1 id="presentToday">0</h1>
+        </div>
+    </div>
+
+    <div class="stat yellow">
+        <i class="fa-solid fa-user-clock"></i>
+        <div>
+            <h3>Late Today</h3>
+            <h1 id="lateToday">0</h1>
+        </div>
+    </div>
+
+    <div class="stat red">
+        <i class="fa-solid fa-user-xmark"></i>
+        <div>
+            <h3>Absent Today</h3>
+            <h1 id="absentToday">0</h1>
+        </div>
+    </div>
+
+    <div class="stat blue">
+        <i class="fa-solid fa-user-shield"></i>
+        <div>
+            <h3>Excused Today</h3>
+            <h1 id="excusedToday">0</h1>
+        </div>
+    </div>
+
+    <div class="stat purple">
+        <i class="fa-solid fa-chart-pie"></i>
+        <div>
+            <h3>Attendance Rate</h3>
+            <h1 id="attendanceRate">0%</h1>
+        </div>
+    </div>
+
+</div>
+<div class="panel">
+
+<h2>
+
+<i class="fa-solid fa-calendar-check"></i>
+
+Today's Attendance
+
+</h2>
+
+<table class="dashboard-table">
+
+<thead>
+
+<tr>
+
+<th>LRN</th>
+
+<th>Name</th>
+
+<th>Grade</th>
+
+<th>Section</th>
+
+<th>Time</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="attendanceTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="panel">
+
+<h2>
+
+<i class="fa-solid fa-chart-column"></i>
+
+Attendance Overview
+
+</h2>
+
+<canvas id="attendanceChart" height="200"></canvas>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/auth.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/dashboard.js"></script>
+
+</main>
+
+</div>
+
+</body>
+
+</html>

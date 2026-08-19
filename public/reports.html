@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartAttend | Reports</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="icon" href="images/logo.png">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="fingerprint">
+                <i class="fa-solid fa-qrcode"></i>
+            </div>
+
+            <div>
+                <h2>SmartAttend</h2>
+                <p>QR Attendance System</p>
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
+        <nav>
+
+            <a href="index.html">
+                <i class="fa-solid fa-chart-column"></i>
+                Dashboard
+            </a>
+
+            <a href="registration.html">
+                <i class="fa-solid fa-user-plus"></i>
+                Registration
+            </a>
+
+            <a href="qrcode.html">
+                <i class="fa-solid fa-qrcode"></i>
+                QR Scanner
+            </a>
+
+            <a href="attendance.html">
+                <i class="fa-solid fa-calendar-check"></i>
+                Attendance
+            </a>
+
+            <a href="reports.html" class="active">
+                <i class="fa-solid fa-file-lines"></i>
+                Reports
+            </a>
+
+            <a href="settings.html">
+                <i class="fa-solid fa-gear"></i>
+                Settings
+            </a>
+
+            <a href="systemlogs.html">
+                <i class="fa-solid fa-list"></i>
+                System Logs
+            </a>
+
+            <a href="teachers.html">
+                <i class="fa-solid fa-chalkboard-user"></i>
+                Teachers
+            </a>
+
+            <a href="schoolyear.html">
+                <i class="fa-solid fa-calendar-days"></i>
+                School Year
+            </a>
+
+            <a href="promote.html">
+                <i class="fa-solid fa-arrow-up"></i>
+                Promote Students
+            </a>
+
+            <a href="#" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+
+        </nav>
+
+
+        <br>
+        <br>
+
+
+        <!-- =================================================
+             PROFILE
+        ================================================== -->
+
+        <div class="profile">
+
+            <div class="avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div class="profile-info">
+
+                <h3 id="userName">
+                    Administrator
+                </h3>
+
+                <p id="userRole">
+                    Admin
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SIDEBAR FOOTER
+        ================================================== -->
+
+        <div class="sidebar-footer">
+
+            <h3>SMARTATTEND</h3>
+
+            <p>Developed by</p>
+
+            <h4>CodeSynX</h4>
+
+            <span>© 2026</span>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main>
+
+
+        <!-- =================================================
+             TOP TOOLBAR
+        ================================================== -->
+
+        <header>
+
+            <div class="report-toolbar">
+
+
+                <!-- =========================================
+                     FILTER CONTAINER
+                ========================================== -->
+
+                <div class="filter-container">
+
+
+                    <!-- GRADE -->
+
+                    <select id="gradeFilter">
+
+                        <option value="">
+                            All Grades
+                        </option>
+
+                        <option value="Grade 7">
+                            Grade 7
+                        </option>
+
+                        <option value="Grade 8">
+                            Grade 8
+                        </option>
+
+                        <option value="Grade 9">
+                            Grade 9
+                        </option>
+
+                        <option value="Grade 10">
+                            Grade 10
+                        </option>
+
+                        <option value="Grade 11">
+                            Grade 11
+                        </option>
+
+                        <option value="Grade 12">
+                            Grade 12
+                        </option>
+
+                    </select>
+
+
+                    <!-- SECTION -->
+
+                    <select
+                        id="sectionFilter"
+                        name="section"
+                    >
+
+                        <option value="">
+                            All Sections
+                        </option>
+
+                    </select>
+
+
+                    <!-- SEARCH -->
+
+                    <input
+                        type="text"
+                        id="searchReport"
+                        placeholder="🔍 Search Student"
+                    >
+
+                </div>
+
+
+                <!-- =========================================
+                     ACTION BUTTONS
+                ========================================== -->
+
+                <div class="action-container">
+
+
+                    <!-- GENERATE -->
+
+                    <button
+                        type="button"
+                        id="generateReportBtn"
+                        class="btn-green"
+                    >
+
+                        <i class="fa-solid fa-filter"></i>
+
+                        Generate Report
+
+                    </button>
+
+
+                    <!-- PDF -->
+
+                    <button
+                        type="button"
+                        id="exportPdfBtn"
+                        class="btn-red"
+                    >
+
+                        <i class="fa-solid fa-file-pdf"></i>
+
+                        PDF
+
+                    </button>
+
+
+                    <!-- EXCEL -->
+
+                    <button
+                        type="button"
+                        id="exportExcelBtn"
+                        class="btn-excel"
+                    >
+
+                        <i class="fa-solid fa-file-excel"></i>
+
+                        Excel
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE TITLE
+        ================================================== -->
+
+        <section class="welcome">
+
+            <h1>
+                Attendance Reports
+            </h1>
+
+            <p>
+                Generate and export attendance reports.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             SUMMARY CARDS
+        ================================================== -->
+
+        <div class="stats">
+
+
+            <!-- TOTAL -->
+
+            <div class="stat">
+
+                <i class="fa-solid fa-list"></i>
+
+                <div>
+
+                    <h3>
+                        Total Attendance
+                    </h3>
+
+                    <h1 id="totalAttendance">
+                        0
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRESENT -->
+
+            <div class="stat green">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <div>
+
+                    <h3>
+                        Present
+                    </h3>
+
+                    <h1 id="present">
+                        0
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <!-- LATE -->
+
+            <div class="stat yellow">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <div>
+
+                    <h3>
+                        Late
+                    </h3>
+
+                    <h1 id="late">
+                        0
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <!-- ABSENT -->
+
+            <div class="stat red">
+
+                <i class="fa-solid fa-circle-xmark"></i>
+
+                <div>
+
+                    <h3>
+                        Absent
+                    </h3>
+
+                    <h1 id="absent">
+                        0
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DATE FILTER
+        ================================================== -->
+
+        <div class="report-filter">
+
+
+            <!-- DATE -->
+
+            <div class="filter-group">
+
+                <label for="reportDate">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    Attendance Date
+
+                </label>
+
+
+                <input
+                    type="date"
+                    id="reportDate"
+                >
+               
+            </div>
+<div class="filter-group">
+
+    <label for="reportAdviser">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        Adviser
+    </label>
+
+    <input
+        type="text"
+        id="reportAdviser"
+        value="Administrator"
+        readonly
+    >
+
+</div>
+
+            <!-- VIEW REPORT -->
+
+            <button
+                type="button"
+                id="viewReportBtn"
+                class="report-search-btn"
+            >
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                View Report
+
+            </button>
+
+
+            <!-- TODAY -->
+
+            <button
+                type="button"
+                id="todayReportBtn"
+                class="report-today-btn"
+            >
+
+                <i class="fa-solid fa-calendar-day"></i>
+
+                Today
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             ATTENDANCE REPORT TABLE
+        ================================================== -->
+
+        <div class="panel">
+
+
+            <h2>
+
+                <i class="fa-solid fa-table"></i>
+
+                Attendance Report
+
+            </h2>
+
+
+            <div class="attendance-report-table-wrapper">
+
+
+                <table class="attendance-report-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                LRN
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Grade
+                            </th>
+
+                            <th>
+                                Section
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="reportTable">
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                style="text-align:center;"
+                            >
+
+                                Select a date to view attendance.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     EXCEL LIBRARY
+====================================================== -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+</script>
+
+
+<!-- =====================================================
+     JSPDF
+====================================================== -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+</script>
+
+
+<!-- =====================================================
+     JSPDF AUTOTABLE
+====================================================== -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js">
+</script>
+
+
+<!-- =====================================================
+     AUTHENTICATION
+====================================================== -->
+
+<script src="js/auth.js"></script>
+
+
+<!-- =====================================================
+     SOCKET.IO
+====================================================== -->
+
+<script src="/socket.io/socket.io.js"></script>
+
+
+<!-- =====================================================
+     REPORTS JAVASCRIPT
+====================================================== -->
+
+<script src="js/reports.js"></script>
+
+
+</body>
+
+</html>

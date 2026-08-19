@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartAttend | Teachers</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="icon" href="images/logo.png">
+
+<style>
+
+/* ==========================================
+   TEACHER TABLE
+========================================== */
+
+.teachers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.teachers-table th {
+    background: #67951b;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.teachers-table td {
+    padding: 18px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* ==========================================
+   ACTION COLUMN
+========================================== */
+
+.teachers-table th:last-child,
+.teachers-table td:last-child {
+    width: 180px;
+    min-width: 180px;
+}
+
+/* Action buttons container */
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+/* Edit button */
+
+.action-buttons .edit-btn {
+    background: #65b5dc;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.action-buttons .edit-btn:hover {
+    background: #4aa3ce;
+}
+
+/* Delete button */
+
+.action-buttons .delete-btn {
+    background: #65b5dc;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.action-buttons .delete-btn:hover {
+    background: #4aa3ce;
+}
+
+/* ==========================================
+   PASSWORD
+========================================== */
+
+.password-box {
+    position: relative;
+    width: 100%;
+}
+
+.password-box input {
+    width: 100%;
+    padding-right: 45px;
+    box-sizing: border-box;
+}
+
+.password-box i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #67951b;
+}
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+#searchTeacher {
+    width: 100%;
+    max-width: 400px;
+    padding: 13px 16px;
+    border: 1px solid #d5dce5;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   RESPONSIVE TABLE
+========================================== */
+
+@media (max-width: 900px) {
+
+    .teachers-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .action-buttons {
+        flex-wrap: nowrap;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ==========================================
+     SIDEBAR
+========================================== -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="fingerprint">
+            <i class="fa-solid fa-qrcode"></i>
+        </div>
+
+        <div>
+            <h2>SmartAttend</h2>
+            <p>QR Attendance System</p>
+        </div>
+
+    </div>
+
+    <nav>
+
+        <a href="index.html">
+            <i class="fa-solid fa-chart-column"></i>
+            Dashboard
+        </a>
+
+        <a href="registration.html">
+            <i class="fa-solid fa-user-plus"></i>
+            Registration
+        </a>
+
+        <a href="qrcode.html">
+            <i class="fa-solid fa-qrcode"></i>
+            QR Scanner
+        </a>
+
+        <a href="attendance.html">
+            <i class="fa-solid fa-calendar-check"></i>
+            Attendance
+        </a>
+
+        <a href="reports.html">
+            <i class="fa-solid fa-file-lines"></i>
+            Reports
+        </a>
+
+        <a href="settings.html">
+            <i class="fa-solid fa-gear"></i>
+            Settings
+        </a>
+
+        <a href="systemlogs.html">
+            <i class="fa-solid fa-list"></i>
+            System Logs
+        </a>
+
+        <a href="teachers.html" class="active">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            Teachers
+        </a>
+
+        <a href="schoolyear.html">
+            <i class="fa-solid fa-calendar-days"></i>
+            School Year
+        </a>
+
+        <a href="promote.html">
+            <i class="fa-solid fa-arrow-up"></i>
+            Promote Students
+        </a>
+
+        <a href="#" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </a>
+
+    </nav>
+
+    <br><br>
+
+    <div class="profile">
+
+        <div class="avatar">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div class="profile-info">
+            <h3 id="userName">Administrator</h3>
+            <p id="userRole">Admin</p>
+        </div>
+
+    </div>
+
+    <div class="sidebar-footer">
+
+        <h3>SMARTATTEND</h3>
+
+        <p>Developed by</p>
+
+        <h4>CodeSynX</h4>
+
+        <span>© 2026</span>
+
+    </div>
+
+</aside>
+
+
+<!-- ==========================================
+     MAIN
+========================================== -->
+
+<main>
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+        <h1>Teacher Management</h1>
+
+        <p>
+            Create and manage teacher accounts.
+        </p>
+
+    </section>
+
+
+    <!-- ======================================
+         REGISTER TEACHER
+    ======================================= -->
+
+    <div class="panel">
+
+        <h2>
+
+            <i class="fa-solid fa-user-plus"></i>
+
+            Register Teacher
+
+        </h2>
+
+
+        <div class="form-grid">
+
+            <!-- FULL NAME -->
+
+            <input
+                type="text"
+                id="fullName"
+                placeholder="Teacher Name"
+            >
+
+
+            <!-- USERNAME -->
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Username"
+            >
+
+
+            <!-- PASSWORD -->
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="teacherPassword"
+                    placeholder="Password"
+                >
+
+                <i
+                    class="fa-solid fa-eye"
+                    id="togglePassword"
+                    onclick="togglePassword()">
+                </i>
+
+            </div>
+
+
+            <!-- GRADE -->
+
+            <select id="grade">
+
+                <option value="">
+                    Select Grade
+                </option>
+
+                <option value="Grade 7">
+                    Grade 7
+                </option>
+
+                <option value="Grade 8">
+                    Grade 8
+                </option>
+
+                <option value="Grade 9">
+                    Grade 9
+                </option>
+
+                <option value="Grade 10">
+                    Grade 10
+                </option>
+
+                <option value="Grade 11">
+                    Grade 11
+                </option>
+
+                <option value="Grade 12">
+                    Grade 12
+                </option>
+
+            </select>
+
+
+            <!-- SECTION -->
+
+            <select id="section">
+
+                <option value="">
+                    Select Section
+                </option>
+
+            </select>
+
+
+            <!-- CREATE -->
+
+            <button
+                type="button"
+                onclick="addTeacher()">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Create Teacher
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         TEACHER LIST
+    ======================================= -->
+
+    <div class="panel">
+
+        <h2>
+
+            <i class="fa-solid fa-users"></i>
+
+            Teacher List
+
+        </h2>
+
+
+        <!-- SEARCH -->
+
+        <input
+            type="text"
+            id="searchTeacher"
+            placeholder="Search Teacher..."
+        >
+
+
+        <!-- TABLE -->
+
+        <table class="teachers-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+
+                    <th>Username</th>
+
+                    <th>Grade</th>
+
+                    <th>Section</th>
+
+                    <th>Adviser</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="teacherTable">
+
+                <!-- teachers.js will insert teachers here -->
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+
+</div>
+
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
+
+<script src="js/auth.js"></script>
+
+<script src="js/teachers.js"></script>
+
+</body>
+
+</html>
