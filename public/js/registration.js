@@ -67,10 +67,10 @@ function normalizeSection(value) {
 
 
 const teacherGrade =
-    normalizeGrade(rawTeacherGrade);
+    normalizeGrade(rawTeacherGrade || "");
 
 const teacherSection =
-    rawTeacherSection.trim();
+    String(rawTeacherSection || "").trim();
 
 const teacherSectionNormalized =
     normalizeSection(teacherSection);
