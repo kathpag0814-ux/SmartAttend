@@ -3,6 +3,12 @@
 // Student Registration
 // ==========================================
 
+"use strict";
+
+// ==========================================
+// API
+// ==========================================
+
 const API = "/api";
 
 // ==========================================
@@ -10,16 +16,21 @@ const API = "/api";
 // ==========================================
 
 const currentRole =
-    (localStorage.getItem("role") || "").trim().toLowerCase();
+    (localStorage.getItem("role") || "")
+        .trim()
+        .toLowerCase();
 
 const rawTeacherGrade =
-    (localStorage.getItem("grade") || "").trim();
+    (localStorage.getItem("grade") || "")
+        .trim();
 
 const rawTeacherSection =
-    (localStorage.getItem("section") || "").trim();
+    (localStorage.getItem("section") || "")
+        .trim();
 
 const teacherName =
-    (localStorage.getItem("fullName") || "").trim();
+    (localStorage.getItem("fullName") || "")
+        .trim();
 
 const token =
     localStorage.getItem("token") || "";
@@ -31,19 +42,16 @@ const token =
 
 function normalizeGrade(value) {
 
-    const grade = String(value || "").trim();
+    const grade =
+        String(value || "")
+            .trim();
 
     if (!grade) {
         return "";
     }
 
-    // Accept:
-    // Grade 7
-    // grade 7
-    // 7
-    // GRADE 7
-
-    const match = grade.match(/(\d+)/);
+    const match =
+        grade.match(/(\d+)/);
 
     if (match) {
         return `Grade ${match[1]}`;
@@ -63,21 +71,26 @@ function normalizeSection(value) {
         .trim()
         .replace(/\s+/g, " ")
         .toLowerCase();
+
 }
 
 
+// ==========================================
+// TEACHER ASSIGNMENT
+// ==========================================
+
 const teacherGrade =
-    normalizeGrade(rawTeacherGrade || "");
+    normalizeGrade(rawTeacherGrade);
 
 const teacherSection =
-    String(rawTeacherSection || "").trim();
+    rawTeacherSection;
 
 const teacherSectionNormalized =
     normalizeSection(teacherSection);
 
 
 // ==========================================
-// LOGGED-IN USER DEBUG
+// DEBUG
 // ==========================================
 
 console.log("====================================");
@@ -88,8 +101,12 @@ console.log("Teacher:", teacherName);
 console.log("Raw Grade:", rawTeacherGrade);
 console.log("Normalized Grade:", teacherGrade);
 console.log("Raw Section:", rawTeacherSection);
-console.log("Normalized Section:", teacherSectionNormalized);
+console.log(
+    "Normalized Section:",
+    teacherSectionNormalized
+);
 console.log("Token exists:", !!token);
+console.log("API:", API);
 console.log("====================================");
 
 
@@ -194,10 +211,11 @@ const SECTIONS = {
 
 
 // ==========================================
-// PHOTO
+// GLOBAL VARIABLES
 // ==========================================
 
 let selectedPhoto = "";
+let allStudents = [];
 
 
 // ==========================================
@@ -212,7 +230,7 @@ function getElement(id) {
 
 
 // ==========================================
-// CHECK IF TEACHER
+// CHECK TEACHER
 // ==========================================
 
 function isTeacher() {
@@ -223,7 +241,7 @@ function isTeacher() {
 
 
 // ==========================================
-// CHECK TEACHER ASSIGNMENT
+// TEACHER ASSIGNMENT EXISTS
 // ==========================================
 
 function hasTeacherAssignment() {
@@ -238,15 +256,13 @@ function hasTeacherAssignment() {
 
 
 // ==========================================
-// CHECK IF STUDENT BELONGS TO TEACHER
+// CHECK STUDENT BELONGS TO TEACHER
 // ==========================================
 
 function studentBelongsToTeacher(student) {
 
     if (!isTeacher()) {
-
         return true;
-
     }
 
     const studentGrade =
@@ -265,7 +281,8 @@ function studentBelongsToTeacher(student) {
 
     return (
         studentGrade === teacherGrade &&
-        studentSection === teacherSectionNormalized
+        studentSection ===
+            teacherSectionNormalized
     );
 
 }
@@ -296,122 +313,12 @@ function loadSections() {
 
 
     // ======================================
-    // TEACHER
+    // IMPORTANT:
+    // DO NOT DISABLE DROPDOWNS
     // ======================================
 
-    if (isTeacher()) {
-
-        console.log(
-            "Loading teacher section..."
-        );
-
-        console.log(
-            "Assigned Grade:",
-            teacherGrade
-        );
-
-        console.log(
-            "Assigned Section:",
-            teacherSection
-        );
-
-
-        // ----------------------------------
-        // NO ASSIGNMENT
-        // ----------------------------------
-
-        if (
-            !teacherGrade ||
-            !teacherSection
-        ) {
-
-            gradeSelect.value = "";
-
-            gradeSelect.disabled = true;
-
-            sectionSelect.innerHTML = "";
-
-            const option =
-                document.createElement("option");
-
-            option.value = "";
-
-            option.textContent =
-                "No section assigned";
-
-            sectionSelect.appendChild(option);
-
-            sectionSelect.disabled = true;
-
-            console.warn(
-                "Teacher has no grade/section assignment."
-            );
-
-            return;
-
-        }
-
-
-        // ----------------------------------
-        // SET TEACHER GRADE
-        // ----------------------------------
-
-        gradeSelect.value =
-            teacherGrade;
-
-        gradeSelect.disabled =
-            true;
-
-
-        // ----------------------------------
-        // ONLY TEACHER SECTION
-        // ----------------------------------
-
-        sectionSelect.innerHTML = "";
-
-
-        const option =
-            document.createElement("option");
-
-        option.value =
-            teacherSection;
-
-        option.textContent =
-            teacherSection;
-
-        option.selected =
-            true;
-
-        sectionSelect.appendChild(option);
-
-
-        // Teacher cannot change section
-
-        sectionSelect.disabled =
-            true;
-
-
-        console.log(
-            "Teacher registration restricted to:",
-            teacherGrade,
-            teacherSection
-        );
-
-
-        return;
-
-    }
-
-
-    // ======================================
-    // ADMIN
-    // ======================================
-
-    gradeSelect.disabled =
-        false;
-
-    sectionSelect.disabled =
-        false;
+    gradeSelect.disabled = false;
+    sectionSelect.disabled = false;
 
 
     const selectedGrade =
@@ -420,14 +327,17 @@ function loadSections() {
         );
 
 
+    // ======================================
+    // CLEAR SECTION
+    // ======================================
+
     sectionSelect.innerHTML = "";
 
 
     const defaultOption =
         document.createElement("option");
 
-    defaultOption.value =
-        "";
+    defaultOption.value = "";
 
     defaultOption.textContent =
         selectedGrade
@@ -439,12 +349,20 @@ function loadSections() {
     );
 
 
+    // ======================================
+    // NO GRADE
+    // ======================================
+
     if (!selectedGrade) {
 
         return;
 
     }
 
+
+    // ======================================
+    // GET SECTIONS
+    // ======================================
 
     const gradeSections =
         SECTIONS[selectedGrade] || [];
@@ -469,6 +387,44 @@ function loadSections() {
         }
     );
 
+
+    // ======================================
+    // TEACHER
+    // ======================================
+
+    if (
+        isTeacher() &&
+        teacherGrade &&
+        teacherSection
+    ) {
+
+        if (
+            selectedGrade ===
+            teacherGrade
+        ) {
+
+            const matchingOption =
+                Array.from(
+                    sectionSelect.options
+                ).find(
+                    option =>
+                        normalizeSection(
+                            option.value
+                        ) ===
+                        teacherSectionNormalized
+                );
+
+            if (matchingOption) {
+
+                sectionSelect.value =
+                    matchingOption.value;
+
+            }
+
+        }
+
+    }
+
 }
 
 
@@ -485,7 +441,10 @@ function loadSectionFilter() {
         getElement("sectionFilter");
 
 
-    if (!gradeFilter || !sectionFilter) {
+    if (
+        !gradeFilter ||
+        !sectionFilter
+    ) {
 
         return;
 
@@ -493,65 +452,11 @@ function loadSectionFilter() {
 
 
     // ======================================
-    // TEACHER
+    // DO NOT DISABLE FOR TEACHERS
     // ======================================
 
-    if (isTeacher()) {
-
-        gradeFilter.value =
-            teacherGrade;
-
-        gradeFilter.disabled =
-            true;
-
-
-        sectionFilter.innerHTML =
-            "";
-
-
-        const option =
-            document.createElement("option");
-
-        option.value =
-            teacherSection;
-
-        option.textContent =
-            teacherSection;
-
-        option.selected =
-            true;
-
-
-        sectionFilter.appendChild(
-            option
-        );
-
-
-        sectionFilter.disabled =
-            true;
-
-
-        console.log(
-            "Teacher filter restricted to:",
-            teacherGrade,
-            teacherSection
-        );
-
-
-        return;
-
-    }
-
-
-    // ======================================
-    // ADMIN
-    // ======================================
-
-    gradeFilter.disabled =
-        false;
-
-    sectionFilter.disabled =
-        false;
+    gradeFilter.disabled = false;
+    sectionFilter.disabled = false;
 
 
     const selectedGrade =
@@ -560,19 +465,20 @@ function loadSectionFilter() {
         );
 
 
-    sectionFilter.innerHTML =
-        "";
+    // ======================================
+    // CLEAR
+    // ======================================
+
+    sectionFilter.innerHTML = "";
 
 
     const allOption =
         document.createElement("option");
 
-    allOption.value =
-        "";
+    allOption.value = "";
 
     allOption.textContent =
         "All Sections";
-
 
     sectionFilter.appendChild(
         allOption
@@ -602,13 +508,42 @@ function loadSectionFilter() {
             option.textContent =
                 sectionName;
 
-
             sectionFilter.appendChild(
                 option
             );
 
         }
     );
+
+
+    // ======================================
+    // TEACHER DEFAULT
+    // ======================================
+
+    if (
+        isTeacher() &&
+        selectedGrade === teacherGrade
+    ) {
+
+        const matchingOption =
+            Array.from(
+                sectionFilter.options
+            ).find(
+                option =>
+                    normalizeSection(
+                        option.value
+                    ) ===
+                    teacherSectionNormalized
+            );
+
+        if (matchingOption) {
+
+            sectionFilter.value =
+                matchingOption.value;
+
+        }
+
+    }
 
 }
 
@@ -628,8 +563,8 @@ function setupPhotoUpload() {
 
     if (!photoInput) {
 
-        console.error(
-            "profilePic not found."
+        console.warn(
+            "profilePic element not found."
         );
 
         return;
@@ -650,14 +585,12 @@ function setupPhotoUpload() {
 
                 selectedPhoto = "";
 
-
                 if (fileName) {
 
                     fileName.textContent =
                         "No photo selected";
 
                 }
-
 
                 removePhotoPreview();
 
@@ -666,9 +599,9 @@ function setupPhotoUpload() {
             }
 
 
-            // --------------------------------
-            // IMAGE VALIDATION
-            // --------------------------------
+            // ==================================
+            // IMAGE TYPE
+            // ==================================
 
             if (
                 !file.type.startsWith("image/")
@@ -678,20 +611,18 @@ function setupPhotoUpload() {
                     "Please select an image file."
                 );
 
-                this.value =
-                    "";
+                this.value = "";
 
-                selectedPhoto =
-                    "";
+                selectedPhoto = "";
 
                 return;
 
             }
 
 
-            // --------------------------------
-            // FILE SIZE
-            // --------------------------------
+            // ==================================
+            // IMAGE SIZE
+            // ==================================
 
             if (
                 file.size >
@@ -702,11 +633,9 @@ function setupPhotoUpload() {
                     "Photo must be smaller than 5MB."
                 );
 
-                this.value =
-                    "";
+                this.value = "";
 
-                selectedPhoto =
-                    "";
+                selectedPhoto = "";
 
                 return;
 
@@ -731,7 +660,6 @@ function setupPhotoUpload() {
                     selectedPhoto =
                         event.target.result;
 
-
                     showPhotoPreview(
                         selectedPhoto
                     );
@@ -739,9 +667,21 @@ function setupPhotoUpload() {
                 };
 
 
-            reader.readAsDataURL(
-                file
-            );
+            reader.onerror =
+                function() {
+
+                    console.error(
+                        "Unable to read photo."
+                    );
+
+                    alert(
+                        "Unable to read the selected photo."
+                    );
+
+                };
+
+
+            reader.readAsDataURL(file);
 
         }
     );
@@ -763,17 +703,12 @@ function showPhotoPreview(src) {
 
     if (!container) {
 
-        console.warn(
-            "photoPreviewContainer not found."
-        );
-
         return;
 
     }
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     const img =
@@ -809,9 +744,7 @@ function showPhotoPreview(src) {
         "10px auto";
 
 
-    container.appendChild(
-        img
-    );
+    container.appendChild(img);
 
 }
 
@@ -886,7 +819,6 @@ async function saveStudent() {
 
     }
 
-
     if (!nameInput) {
 
         alert(
@@ -897,7 +829,6 @@ async function saveStudent() {
 
     }
 
-
     if (!gradeInput) {
 
         alert(
@@ -907,7 +838,6 @@ async function saveStudent() {
         return;
 
     }
-
 
     if (!sectionInput) {
 
@@ -921,7 +851,7 @@ async function saveStudent() {
 
 
     // ======================================
-    // GET FORM VALUES
+    // VALUES
     // ======================================
 
     const studentId =
@@ -930,46 +860,70 @@ async function saveStudent() {
     const name =
         nameInput.value.trim();
 
-
     let grade =
         normalizeGrade(
             gradeInput.value
         );
-
 
     let section =
         sectionInput.value.trim();
 
 
     // ======================================
-    // FORCE TEACHER ASSIGNMENT
+    // TEACHER SECURITY
     // ======================================
 
     if (isTeacher()) {
 
-        console.log(
-            "Teacher detected."
-        );
+        if (!hasTeacherAssignment()) {
+
+            alert(
+                "Your teacher account has no assigned grade and section. Please contact the administrator."
+            );
+
+            return;
+
+        }
 
 
-        // NEVER TRUST FORM VALUES
+        // IMPORTANT:
+        // Teacher may click/select,
+        // but registration is restricted.
 
-        grade =
-            teacherGrade;
+        if (
+            normalizeGrade(grade) !==
+            teacherGrade
+        ) {
 
-        section =
-            teacherSection;
+            alert(
+                `You can only register students in ${teacherGrade}.`
+            );
+
+            gradeInput.value =
+                teacherGrade;
+
+            loadSections();
+
+            return;
+
+        }
 
 
-        console.log(
-            "Forced teacher grade:",
-            grade
-        );
+        if (
+            normalizeSection(section) !==
+            teacherSectionNormalized
+        ) {
 
-        console.log(
-            "Forced teacher section:",
-            section
-        );
+            alert(
+                `You can only register students in ${teacherSection}.`
+            );
+
+            sectionInput.value =
+                teacherSection;
+
+            return;
+
+        }
 
     }
 
@@ -1031,43 +985,7 @@ async function saveStudent() {
 
 
     // ======================================
-    // FINAL TEACHER SECURITY CHECK
-    // ======================================
-
-    if (isTeacher()) {
-
-        if (
-            normalizeGrade(grade) !==
-            teacherGrade
-        ) {
-
-            alert(
-                "You can only register students in your assigned grade."
-            );
-
-            return;
-
-        }
-
-
-        if (
-            normalizeSection(section) !==
-            teacherSectionNormalized
-        ) {
-
-            alert(
-                "You can only register students in your assigned section."
-            );
-
-            return;
-
-        }
-
-    }
-
-
-    // ======================================
-    // STUDENT DATA
+    // DATA
     // ======================================
 
     const studentData = {
@@ -1100,7 +1018,7 @@ async function saveStudent() {
 
 
     // ======================================
-    // DISABLE BUTTON
+    // BUTTON
     // ======================================
 
     if (saveButton) {
@@ -1117,15 +1035,14 @@ async function saveStudent() {
     try {
 
         // ==================================
-        // SEND TO BACKEND
+        // POST
         // ==================================
 
         const response =
             await fetch(
                 `${API}/students`,
                 {
-                    method:
-                        "POST",
+                    method: "POST",
 
                     headers: {
 
@@ -1155,10 +1072,6 @@ async function saveStudent() {
             response.status
         );
 
-
-        // ==================================
-        // READ RESPONSE
-        // ==================================
 
         const data =
             await response
@@ -1198,7 +1111,7 @@ async function saveStudent() {
 
 
         // ==================================
-        // GET REGISTERED STUDENT
+        // REGISTERED STUDENT
         // ==================================
 
         const student =
@@ -1227,6 +1140,8 @@ async function saveStudent() {
 
             photo:
                 student.photo ||
+                student.profilePic ||
+                student.profilePhoto ||
                 studentData.photo ||
                 "",
 
@@ -1244,7 +1159,7 @@ async function saveStudent() {
 
 
         // ==================================
-        // SHOW SUCCESS
+        // SHOW QR
         // ==================================
 
         showQRModal(
@@ -1253,21 +1168,20 @@ async function saveStudent() {
 
 
         // ==================================
-        // CLEAR FORM
+        // CLEAR
         // ==================================
 
         clearRegistrationForm();
 
 
         // ==================================
-        // RELOAD TABLE
+        // RELOAD
         // ==================================
 
         await loadStudents();
 
+
     }
-
-
     catch (error) {
 
         console.error(
@@ -1282,8 +1196,6 @@ async function saveStudent() {
         );
 
     }
-
-
     finally {
 
         if (saveButton) {
@@ -1302,7 +1214,7 @@ async function saveStudent() {
 
 
 // ==========================================
-// REGISTER STUDENT COMPATIBILITY
+// REGISTER STUDENT
 // ==========================================
 
 function registerStudent(event) {
@@ -1345,96 +1257,21 @@ function clearRegistrationForm() {
 
     if (studentId) {
 
-        studentId.value =
-            "";
+        studentId.value = "";
 
     }
 
 
     if (name) {
 
-        name.value =
-            "";
-
-    }
-
-
-    // --------------------------------------
-    // TEACHER
-    // --------------------------------------
-
-    if (isTeacher()) {
-
-        if (grade) {
-
-            grade.value =
-                teacherGrade;
-
-        }
-
-
-        if (section) {
-
-            section.innerHTML =
-                "";
-
-
-            const option =
-                document.createElement("option");
-
-            option.value =
-                teacherSection;
-
-            option.textContent =
-                teacherSection;
-
-            option.selected =
-                true;
-
-
-            section.appendChild(
-                option
-            );
-
-            section.disabled =
-                true;
-
-        }
-
-    }
-
-
-    // --------------------------------------
-    // ADMIN
-    // --------------------------------------
-
-    else {
-
-        if (grade) {
-
-            grade.value =
-                "";
-
-        }
-
-
-        if (section) {
-
-            section.disabled =
-                false;
-
-            section.innerHTML =
-                '<option value="">Select Grade First</option>';
-
-        }
+        name.value = "";
 
     }
 
 
     if (photo) {
 
-        photo.value =
-            "";
+        photo.value = "";
 
     }
 
@@ -1447,11 +1284,52 @@ function clearRegistrationForm() {
     }
 
 
-    selectedPhoto =
-        "";
-
+    selectedPhoto = "";
 
     removePhotoPreview();
+
+
+    // ======================================
+    // RESET GRADE
+    // ======================================
+
+    if (grade) {
+
+        grade.value = "";
+
+    }
+
+
+    // ======================================
+    // RESET SECTION
+    // ======================================
+
+    if (section) {
+
+        section.innerHTML =
+            '<option value="">Select Grade First</option>';
+
+        section.value = "";
+
+    }
+
+
+    // ======================================
+    // IMPORTANT:
+    // KEEP DROPDOWNS ENABLED
+    // ======================================
+
+    if (grade) {
+
+        grade.disabled = false;
+
+    }
+
+    if (section) {
+
+        section.disabled = false;
+
+    }
 
 }
 
@@ -1467,10 +1345,6 @@ async function loadStudents() {
 
 
     if (!table) {
-
-        console.error(
-            "#studentTable was not found."
-        );
 
         return;
 
@@ -1498,59 +1372,60 @@ async function loadStudents() {
                             : {})
 
                     }
+
                 }
             );
 
 
+        console.log(
+            "Students HTTP status:",
+            response.status
+        );
+
+
+        const data =
+            await response
+                .json()
+                .catch(
+                    () => ({})
+                );
+
+
         if (!response.ok) {
 
-            const errorData =
-                await response
-                    .json()
-                    .catch(
-                        () => ({})
-                    );
-
-
             throw new Error(
-                errorData.message ||
+                data.message ||
+                data.error ||
                 `Server returned ${response.status}`
             );
 
         }
 
 
-        const data =
-            await response.json();
-
-
-        console.log(
-            "Students response:",
-            data
-        );
-
-
         let students = [];
 
 
-        if (Array.isArray(data)) {
+        if (
+            Array.isArray(data)
+        ) {
 
-            students =
-                data;
+            students = data;
 
         }
-
         else if (
-            Array.isArray(data.students)
+            Array.isArray(
+                data.students
+            )
         ) {
 
             students =
                 data.students;
 
         }
-
         else if (
-            Array.isArray(data.data)
+            Array.isArray(
+                data.data
+            )
         ) {
 
             students =
@@ -1559,29 +1434,21 @@ async function loadStudents() {
         }
 
 
+        console.log(
+            "Students received:",
+            students.length
+        );
+
+
+        allStudents =
+            students;
+
+
         // ==================================
-        // IMPORTANT:
-        // FILTER TEACHER STUDENTS
+        // TEACHER FILTER
         // ==================================
 
         if (isTeacher()) {
-
-            console.log(
-                "Filtering students for teacher..."
-            );
-
-
-            console.log(
-                "Teacher Grade:",
-                teacherGrade
-            );
-
-
-            console.log(
-                "Teacher Section:",
-                teacherSection
-            );
-
 
             students =
                 students.filter(
@@ -1591,13 +1458,162 @@ async function loadStudents() {
                         )
                 );
 
-
-            console.log(
-                "Students after teacher filter:",
-                students.length
-            );
-
         }
+
+
+        // ==================================
+        // HEADER FILTERS
+        // ==================================
+
+        const search =
+            getElement("search");
+
+        const gradeFilter =
+            getElement("gradeFilter");
+
+        const sectionFilter =
+            getElement("sectionFilter");
+
+        const statusFilter =
+            getElement("statusFilter");
+
+
+        const searchValue =
+            search
+                ? search.value
+                    .trim()
+                    .toLowerCase()
+                : "";
+
+
+        const selectedGrade =
+            gradeFilter
+                ? normalizeGrade(
+                    gradeFilter.value
+                )
+                : "";
+
+
+        const selectedSection =
+            sectionFilter
+                ? normalizeSection(
+                    sectionFilter.value
+                )
+                : "";
+
+
+        const selectedStatus =
+            statusFilter
+                ? statusFilter.value
+                : "Active";
+
+
+        // ==================================
+        // APPLY FILTERS
+        // ==================================
+
+        students =
+            students.filter(
+                function(student) {
+
+                    const name =
+                        String(
+                            student.name ||
+                            student.studentName ||
+                            ""
+                        )
+                            .toLowerCase();
+
+                    const id =
+                        String(
+                            student.studentId ||
+                            student.lrn ||
+                            ""
+                        )
+                            .toLowerCase();
+
+                    const grade =
+                        normalizeGrade(
+                            student.grade ||
+                            student.gradeLevel ||
+                            ""
+                        );
+
+                    const section =
+                        normalizeSection(
+                            student.section ||
+                            student.sectionName ||
+                            ""
+                        );
+
+                    const status =
+                        String(
+                            student.status ||
+                            "Active"
+                        )
+                            .toLowerCase();
+
+
+                    // Search
+
+                    if (
+                        searchValue &&
+                        !name.includes(
+                            searchValue
+                        ) &&
+                        !id.includes(
+                            searchValue
+                        )
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    // Grade
+
+                    if (
+                        selectedGrade &&
+                        grade !== selectedGrade
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    // Section
+
+                    if (
+                        selectedSection &&
+                        section !==
+                        selectedSection
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    // Status
+
+                    if (
+                        selectedStatus !==
+                        "All" &&
+                        status !==
+                        selectedStatus.toLowerCase()
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    return true;
+
+                }
+            );
 
 
         displayStudents(
@@ -1609,9 +1625,8 @@ async function loadStudents() {
             students
         );
 
+
     }
-
-
     catch (error) {
 
         console.error(
@@ -1671,8 +1686,7 @@ function displayStudents(students) {
     }
 
 
-    table.innerHTML =
-        "";
+    table.innerHTML = "";
 
 
     if (
@@ -1694,12 +1708,19 @@ function displayStudents(students) {
 
                     ${
                         isTeacher()
-                            ? `No students found in ${escapeHTML(
-                                teacherGrade
-                            )} - ${escapeHTML(
-                                teacherSection
-                            )}.`
-                            : "No registered students found."
+                            ? `
+                                No students found in
+                                ${escapeHTML(
+                                    teacherGrade
+                                )}
+                                -
+                                ${escapeHTML(
+                                    teacherSection
+                                )}.
+                              `
+                            : `
+                                No registered students found.
+                              `
                     }
 
                 </td>
@@ -1707,7 +1728,6 @@ function displayStudents(students) {
             </tr>
 
         `;
-
 
         return;
 
@@ -1723,12 +1743,10 @@ function displayStudents(students) {
                 student.LRN ||
                 "";
 
-
             const name =
                 student.name ||
                 student.studentName ||
                 "Unknown";
-
 
             const grade =
                 normalizeGrade(
@@ -1737,24 +1755,21 @@ function displayStudents(students) {
                     ""
                 );
 
-
             const section =
                 student.section ||
                 student.sectionName ||
                 "";
 
-
             const photo =
                 student.photo ||
+                student.profilePic ||
                 student.profilePhoto ||
                 student.photoUrl ||
                 "";
 
-
             const status =
                 student.status ||
                 "Active";
-
 
             const databaseId =
                 student._id ||
@@ -1772,8 +1787,7 @@ function displayStudents(students) {
             // PHOTO
             // ==================================
 
-            let photoHTML =
-                "";
+            let photoHTML = "";
 
 
             if (photo) {
@@ -1789,13 +1803,14 @@ function displayStudents(students) {
                             object-fit:cover;
                             border-radius:50%;
                         "
-                        onerror="this.style.display='none';"
+                        onerror="
+                            this.style.display='none';
+                        "
                     >
 
                 `;
 
             }
-
             else {
 
                 photoHTML = `
@@ -1813,7 +1828,9 @@ function displayStudents(students) {
                         "
                     >
 
-                        <i class="fa-solid fa-user"></i>
+                        <i
+                            class="fa-solid fa-user"
+                        ></i>
 
                     </div>
 
@@ -1831,7 +1848,6 @@ function displayStudents(students) {
                 <td>
                     ${escapeHTML(studentId)}
                 </td>
-
 
                 <td>
 
@@ -1853,16 +1869,13 @@ function displayStudents(students) {
 
                 </td>
 
-
                 <td>
                     ${escapeHTML(grade)}
                 </td>
 
-
                 <td>
                     ${escapeHTML(section)}
                 </td>
-
 
                 <td>
 
@@ -1884,14 +1897,11 @@ function displayStudents(students) {
                         title="Click to view QR Code"
                     >
 
-                        <span>
-                            Loading...
-                        </span>
+                        Loading...
 
                     </div>
 
                 </td>
-
 
                 <td>
 
@@ -1910,7 +1920,6 @@ function displayStudents(students) {
 
                 </td>
 
-
                 <td>
 
                     <button
@@ -1927,7 +1936,9 @@ function displayStudents(students) {
                         "
                     >
 
-                        <i class="fa-solid fa-trash"></i>
+                        <i
+                            class="fa-solid fa-trash"
+                        ></i>
 
                         Delete
 
@@ -1938,13 +1949,11 @@ function displayStudents(students) {
             `;
 
 
-            table.appendChild(
-                row
-            );
+            table.appendChild(row);
 
 
             // ==================================
-            // DELETE BUTTON
+            // DELETE
             // ==================================
 
             const deleteButton =
@@ -1972,17 +1981,13 @@ function displayStudents(students) {
     );
 
 
-    // ==================================
-    // GENERATE QR
-    // ==================================
-
     generateQRCodes();
 
 }
 
 
 // ==========================================
-// GENERATE TABLE QR CODES
+// GENERATE QR CODES
 // ==========================================
 
 function generateQRCodes() {
@@ -1993,7 +1998,7 @@ function generateQRCodes() {
     ) {
 
         console.error(
-            "QRCode library is NOT loaded."
+            "QRCode library is not loaded."
         );
 
         return;
@@ -2024,8 +2029,7 @@ function generateQRCodes() {
             }
 
 
-            element.innerHTML =
-                "";
+            element.innerHTML = "";
 
 
             const canvas =
@@ -2043,9 +2047,6 @@ function generateQRCodes() {
             canvas.style.cursor =
                 "pointer";
 
-            canvas.style.display =
-                "block";
-
 
             element.appendChild(
                 canvas
@@ -2053,27 +2054,14 @@ function generateQRCodes() {
 
 
             QRCode.toCanvas(
-
                 canvas,
-
                 studentId,
-
                 {
-
-                    width:
-                        150,
-
-                    height:
-                        150,
-
-                    margin:
-                        1,
-
-                    errorCorrectionLevel:
-                        "M"
-
+                    width: 150,
+                    height: 150,
+                    margin: 1,
+                    errorCorrectionLevel: "M"
                 },
-
                 function(error) {
 
                     if (error) {
@@ -2083,10 +2071,8 @@ function generateQRCodes() {
                             error
                         );
 
-
                         element.innerHTML =
                             "QR Error";
-
 
                         return;
 
@@ -2097,44 +2083,15 @@ function generateQRCodes() {
                         function() {
 
                             showLargeQRCode(
-
                                 studentId,
-
                                 element.dataset.studentName,
-
                                 element.dataset.studentGrade,
-
                                 element.dataset.studentSection
-
-                            );
-
-                        };
-
-
-                    canvas.onclick =
-                        function(event) {
-
-                            event.preventDefault();
-
-                            event.stopPropagation();
-
-
-                            showLargeQRCode(
-
-                                studentId,
-
-                                element.dataset.studentName,
-
-                                element.dataset.studentGrade,
-
-                                element.dataset.studentSection
-
                             );
 
                         };
 
                 }
-
             );
 
         }
@@ -2144,7 +2101,7 @@ function generateQRCodes() {
 
 
 // ==========================================
-// SHOW LARGE QR
+// SHOW LARGE QR CODE
 // ==========================================
 
 function showLargeQRCode(
@@ -2155,7 +2112,7 @@ function showLargeQRCode(
 ) {
 
     const oldModal =
-        document.getElementById(
+        getElement(
             "tableQRModal"
         );
 
@@ -2184,7 +2141,7 @@ function showLargeQRCode(
         "0";
 
     modal.style.background =
-        "rgba(0,0,0,0.65)";
+        "rgba(0,0,0,.65)";
 
     modal.style.display =
         "flex";
@@ -2228,78 +2185,45 @@ function showLargeQRCode(
                     background:none;
                     font-size:28px;
                     cursor:pointer;
-                    color:#374151;
                 "
             >
                 &times;
             </button>
 
-
-            <h2
-                style="
-                    color:#5f8f1c;
-                    margin:5px 0 20px;
-                "
-            >
-
-                <i class="fa-solid fa-qrcode"></i>
+            <h2>
+                <i
+                    class="fa-solid fa-qrcode"
+                ></i>
 
                 Student QR Code
-
             </h2>
-
 
             <div
                 id="largeTableQR"
                 style="
                     display:flex;
                     justify-content:center;
-                    align-items:center;
                     margin:20px auto;
                 "
             ></div>
 
-
-            <h3
-                style="
-                    margin:10px 0;
-                    font-size:22px;
-                "
-            >
-
+            <h3>
                 ${escapeHTML(studentName)}
-
             </h3>
-
 
             <p>
                 <strong>LRN:</strong>
                 ${escapeHTML(studentId)}
             </p>
 
-
             <p>
                 <strong>Grade:</strong>
                 ${escapeHTML(studentGrade)}
             </p>
 
-
             <p>
                 <strong>Section:</strong>
                 ${escapeHTML(studentSection)}
-            </p>
-
-
-            <p
-                style="
-                    color:#6b7280;
-                    font-size:13px;
-                    margin-top:20px;
-                "
-            >
-
-                Scan this QR code for attendance.
-
             </p>
 
         </div>
@@ -2313,7 +2237,7 @@ function showLargeQRCode(
 
 
     const qrContainer =
-        document.getElementById(
+        getElement(
             "largeTableQR"
         );
 
@@ -2336,27 +2260,14 @@ function showLargeQRCode(
 
 
         QRCode.toCanvas(
-
             canvas,
-
             studentId,
-
             {
-
-                width:
-                    240,
-
-                height:
-                    240,
-
-                margin:
-                    2,
-
-                errorCorrectionLevel:
-                    "M"
-
+                width: 240,
+                height: 240,
+                margin: 2,
+                errorCorrectionLevel: "M"
             },
-
             function(error) {
 
                 if (error) {
@@ -2369,14 +2280,13 @@ function showLargeQRCode(
                 }
 
             }
-
         );
 
     }
 
 
     const closeButton =
-        document.getElementById(
+        getElement(
             "closeTableQR"
         );
 
@@ -2413,13 +2323,15 @@ function showLargeQRCode(
 
 
 // ==========================================
-// REGISTRATION SUCCESS QR MODAL
+// SHOW REGISTRATION QR MODAL
 // ==========================================
 
 function showQRModal(student) {
 
     const modal =
-        getElement("qrModal");
+        getElement(
+            "qrModal"
+        );
 
 
     if (!modal) {
@@ -2434,13 +2346,19 @@ function showQRModal(student) {
 
 
     const qrContainer =
-        getElement("bigQRCode");
+        getElement(
+            "bigQRCode"
+        );
 
     const studentInfo =
-        getElement("studentInfo");
+        getElement(
+            "studentInfo"
+        );
 
     const profilePreview =
-        getElement("profilePreview");
+        getElement(
+            "profilePreview"
+        );
 
 
     const studentId =
@@ -2459,14 +2377,13 @@ function showQRModal(student) {
         student?.photo || "";
 
 
-    // ==================================
+    // ======================================
     // QR
-    // ==================================
+    // ======================================
 
     if (qrContainer) {
 
-        qrContainer.innerHTML =
-            "";
+        qrContainer.innerHTML = "";
 
 
         const canvas =
@@ -2487,24 +2404,13 @@ function showQRModal(student) {
         ) {
 
             QRCode.toCanvas(
-
                 canvas,
-
                 studentId,
-
                 {
-
-                    width:
-                        220,
-
-                    height:
-                        220,
-
-                    margin:
-                        2
-
+                    width: 220,
+                    height: 220,
+                    margin: 2
                 },
-
                 function(error) {
 
                     if (error) {
@@ -2517,7 +2423,6 @@ function showQRModal(student) {
                     }
 
                 }
-
             );
 
         }
@@ -2525,9 +2430,9 @@ function showQRModal(student) {
     }
 
 
-    // ==================================
+    // ======================================
     // PHOTO
-    // ==================================
+    // ======================================
 
     if (profilePreview) {
 
@@ -2540,7 +2445,6 @@ function showQRModal(student) {
                 "block";
 
         }
-
         else {
 
             profilePreview.removeAttribute(
@@ -2555,9 +2459,9 @@ function showQRModal(student) {
     }
 
 
-    // ==================================
+    // ======================================
     // INFORMATION
-    // ==================================
+    // ======================================
 
     if (studentInfo) {
 
@@ -2597,10 +2501,12 @@ function showQRModal(student) {
 // CREATE REGISTRATION QR MODAL
 // ==========================================
 
-function createRegistrationQRModal(student) {
+function createRegistrationQRModal(
+    student
+) {
 
     const old =
-        document.getElementById(
+        getElement(
             "autoRegistrationQRModal"
         );
 
@@ -2681,6 +2587,7 @@ function createRegistrationQRModal(student) {
 
             <button
                 id="registrationModalClose"
+                type="button"
                 style="
                     position:absolute;
                     top:10px;
@@ -2694,18 +2601,9 @@ function createRegistrationQRModal(student) {
                 &times;
             </button>
 
-
-            <h1
-                style="
-                    color:#638f1b;
-                    margin:0 0 20px;
-                "
-            >
-
+            <h1>
                 Student Registered Successfully
-
             </h1>
-
 
             <div
                 id="registrationBigQR"
@@ -2715,7 +2613,6 @@ function createRegistrationQRModal(student) {
                     margin:15px 0;
                 "
             ></div>
-
 
             ${
                 photo
@@ -2730,33 +2627,28 @@ function createRegistrationQRModal(student) {
                                 margin:10px auto;
                             "
                         >
-                    `
+                      `
                     : ""
             }
-
 
             <h2>
                 ${escapeHTML(name)}
             </h2>
-
 
             <p>
                 <strong>LRN:</strong>
                 ${escapeHTML(studentId)}
             </p>
 
-
             <p>
                 <strong>Grade:</strong>
                 ${escapeHTML(grade)}
             </p>
 
-
             <p>
                 <strong>Section:</strong>
                 ${escapeHTML(section)}
             </p>
-
 
             <div
                 style="
@@ -2769,39 +2661,20 @@ function createRegistrationQRModal(student) {
 
                 <button
                     id="printRegistrationQR"
-                    style="
-                        border:none;
-                        background:#638f1b;
-                        color:white;
-                        padding:12px 25px;
-                        border-radius:8px;
-                        cursor:pointer;
-                        font-weight:bold;
-                    "
+                    type="button"
                 >
-
-                    <i class="fa-solid fa-print"></i>
+                    <i
+                        class="fa-solid fa-print"
+                    ></i>
 
                     Print QR
-
                 </button>
-
 
                 <button
                     id="closeRegistrationQR"
-                    style="
-                        border:none;
-                        background:#638f1b;
-                        color:white;
-                        padding:12px 25px;
-                        border-radius:8px;
-                        cursor:pointer;
-                        font-weight:bold;
-                    "
+                    type="button"
                 >
-
                     Close
-
                 </button>
 
             </div>
@@ -2816,12 +2689,12 @@ function createRegistrationQRModal(student) {
     );
 
 
-    // ==================================
-    // GENERATE QR
-    // ==================================
+    // ======================================
+    // QR
+    // ======================================
 
     const qrContainer =
-        document.getElementById(
+        getElement(
             "registrationBigQR"
         );
 
@@ -2844,24 +2717,13 @@ function createRegistrationQRModal(student) {
 
 
         QRCode.toCanvas(
-
             canvas,
-
             studentId,
-
             {
-
-                width:
-                    220,
-
-                height:
-                    220,
-
-                margin:
-                    2
-
+                width: 220,
+                height: 220,
+                margin: 2
             },
-
             function(error) {
 
                 if (error) {
@@ -2874,15 +2736,14 @@ function createRegistrationQRModal(student) {
                 }
 
             }
-
         );
 
     }
 
 
-    // ==================================
+    // ======================================
     // CLOSE
-    // ==================================
+    // ======================================
 
     const close =
         function() {
@@ -2893,13 +2754,12 @@ function createRegistrationQRModal(student) {
 
 
     const closeButton =
-        document.getElementById(
+        getElement(
             "registrationModalClose"
         );
 
-
     const closeButton2 =
-        document.getElementById(
+        getElement(
             "closeRegistrationQR"
         );
 
@@ -2920,12 +2780,12 @@ function createRegistrationQRModal(student) {
     }
 
 
-    // ==================================
+    // ======================================
     // PRINT
-    // ==================================
+    // ======================================
 
     const printButton =
-        document.getElementById(
+        getElement(
             "printRegistrationQR"
         );
 
@@ -2942,9 +2802,9 @@ function createRegistrationQRModal(student) {
     }
 
 
-    // ==================================
+    // ======================================
     // OUTSIDE CLICK
-    // ==================================
+    // ======================================
 
     modal.addEventListener(
         "click",
@@ -2966,13 +2826,15 @@ function createRegistrationQRModal(student) {
 
 
 // ==========================================
-// CLOSE EXISTING QR MODAL
+// CLOSE QR
 // ==========================================
 
 function closeQR() {
 
     const modal =
-        getElement("qrModal");
+        getElement(
+            "qrModal"
+        );
 
 
     if (modal) {
@@ -3017,13 +2879,9 @@ async function deleteStudent(id) {
 
         const response =
             await fetch(
-
                 `${API}/students/${encodeURIComponent(id)}`,
-
                 {
-
-                    method:
-                        "DELETE",
+                    method: "DELETE",
 
                     headers:
                         token
@@ -3034,7 +2892,6 @@ async function deleteStudent(id) {
                             : {}
 
                 }
-
             );
 
 
@@ -3064,8 +2921,6 @@ async function deleteStudent(id) {
         await loadStudents();
 
     }
-
-
     catch (error) {
 
         console.error(
@@ -3088,7 +2943,9 @@ async function deleteStudent(id) {
 // UPDATE STATISTICS
 // ==========================================
 
-function updateStudentStats(students) {
+function updateStudentStats(
+    students
+) {
 
     const totalStudents =
         getElement(
@@ -3112,32 +2969,34 @@ function updateStudentStats(students) {
 
 
     const total =
-        students.length;
+        Array.isArray(students)
+            ? students.length
+            : 0;
 
 
     const active =
-        students.filter(
-            student =>
-                (
-                    student.status ||
-                    "Active"
-                )
-                    .toLowerCase() ===
-                "active"
-        ).length;
+        Array.isArray(students)
+            ? students.filter(
+                student =>
+                    String(
+                        student.status ||
+                        "Active"
+                    )
+                        .toLowerCase() ===
+                    "active"
+            ).length
+            : 0;
 
 
     const sections =
         new Set(
-
-            students
+            (students || [])
                 .map(
                     student =>
                         student.section ||
                         student.sectionName
                 )
                 .filter(Boolean)
-
         ).size;
 
 
@@ -3209,7 +3068,7 @@ function escapeHTML(value) {
 
 
 // ==========================================
-// PAGE LOAD
+// PAGE INITIALIZATION
 // ==========================================
 
 document.addEventListener(
@@ -3221,7 +3080,7 @@ document.addEventListener(
         );
 
         console.log(
-            "SmartAttend Registration loaded."
+            "SmartAttend Registration initialized."
         );
 
         console.log(
@@ -3245,25 +3104,76 @@ document.addEventListener(
 
 
         // ==================================
-        // GRADE
+        // USER NAME
+        // ==================================
+
+        const userName =
+            getElement(
+                "userName"
+            );
+
+
+        if (
+            userName &&
+            teacherName
+        ) {
+
+            userName.textContent =
+                teacherName;
+
+        }
+
+
+        // ==================================
+        // REGISTRATION GRADE
         // ==================================
 
         const grade =
-            getElement("grade");
+            getElement(
+                "grade"
+            );
 
 
         if (grade) {
 
+            grade.disabled = false;
+
             grade.addEventListener(
                 "change",
-                loadSections
+                function() {
+
+                    console.log(
+                        "Registration grade changed:",
+                        this.value
+                    );
+
+                    loadSections();
+
+                }
             );
 
         }
 
 
         // ==================================
-        // LOAD SECTIONS
+        // REGISTRATION SECTION
+        // ==================================
+
+        const section =
+            getElement(
+                "section"
+            );
+
+
+        if (section) {
+
+            section.disabled = false;
+
+        }
+
+
+        // ==================================
+        // INITIAL SECTION LOAD
         // ==================================
 
         loadSections();
@@ -3277,7 +3187,31 @@ document.addEventListener(
 
 
         // ==================================
-        // FILTER
+        // SEARCH
+        // ==================================
+
+        const search =
+            getElement(
+                "search"
+            );
+
+
+        if (search) {
+
+            search.addEventListener(
+                "input",
+                function() {
+
+                    loadStudents();
+
+                }
+            );
+
+        }
+
+
+        // ==================================
+        // GRADE FILTER
         // ==================================
 
         const gradeFilter =
@@ -3288,19 +3222,83 @@ document.addEventListener(
 
         if (gradeFilter) {
 
+            gradeFilter.disabled =
+                false;
+
             gradeFilter.addEventListener(
                 "change",
-                loadSectionFilter
+                function() {
+
+                    loadSectionFilter();
+
+                    loadStudents();
+
+                }
             );
 
         }
 
 
+        // ==================================
+        // SECTION FILTER
+        // ==================================
+
+        const sectionFilter =
+            getElement(
+                "sectionFilter"
+            );
+
+
+        if (sectionFilter) {
+
+            sectionFilter.disabled =
+                false;
+
+            sectionFilter.addEventListener(
+                "change",
+                function() {
+
+                    loadStudents();
+
+                }
+            );
+
+        }
+
+
+        // ==================================
+        // STATUS FILTER
+        // ==================================
+
+        const statusFilter =
+            getElement(
+                "statusFilter"
+            );
+
+
+        if (statusFilter) {
+
+            statusFilter.addEventListener(
+                "change",
+                function() {
+
+                    loadStudents();
+
+                }
+            );
+
+        }
+
+
+        // ==================================
+        // INITIAL FILTER
+        // ==================================
+
         loadSectionFilter();
 
 
         // ==================================
-        // STUDENTS
+        // LOAD STUDENTS
         // ==================================
 
         loadStudents();
