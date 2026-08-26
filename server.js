@@ -123,12 +123,12 @@ const PORT = process.env.PORT || 3000;
 
 if (require.main === module) {
 
-    server.listen(PORT, () => {
+    server.listen(PORT, "0.0.0.0", () => {
 
         console.log("");
         console.log("====================================");
         console.log(" SmartAttend Server Running");
-        console.log(` http://localhost:${PORT}`);
+        console.log(` Port: ${PORT}`);
         console.log("====================================");
         console.log("");
 
